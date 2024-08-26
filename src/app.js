@@ -2,14 +2,12 @@ document.getElementById("drawBtn").addEventListener("click", drawCards);
 document.getElementById("sortBtn").addEventListener("click", sortCards);
 
 let cards = [];
-let originalCards = [];
 let log = [];
 let currentIteration = 0;
 
 function drawCards() {
   const cardCount = parseInt(document.getElementById("cardCount").value) || 0;
   cards = generateRandomCards(cardCount);
-  originalCards = [...cards];
   displayCards(cards);
   log = [];
   currentIteration = 0;
@@ -75,28 +73,24 @@ function sortCards() {
 
   log = [];
   currentIteration = 0;
-  const sortedCards = bubbleSortWithIterations(cards.slice());
-  cards = sortedCards;
-  displayCards(cards);
+  bubbleSortStepByStep(cards); // Ordenar las cartas
   displayLog();
 }
 
-function bubbleSortWithIterations(array) {
+function bubbleSortStepByStep(array) {
   const n = array.length;
-  const result = [...array];
 
   for (let i = 0; i < n - 1; i++) {
     for (let j = 0; j < n - i - 1; j++) {
-      if (compareCards(result[j], result[j + 1]) > 0) {
-        [result[j], result[j + 1]] = [result[j + 1], result[j]];
+      if (compareCards(array[j], array[j + 1]) > 0) {
+        [array[j], array[j + 1]] = [array[j + 1], array[j]];
       }
     }
     log.push({
       iteration: i + 1,
-      sortedCards: result.slice() // Guardar el estado actual de las cartas
+      sortedCards: array.slice() // Guardar el estado actual de las cartas
     });
   }
-  return result;
 }
 
 function compareCards(card1, card2) {
