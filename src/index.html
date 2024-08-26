@@ -1,29 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello Rigo with Vanilla.js</title>
+    <title>Carta Aleatoria</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-      integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-      crossorigin="anonymous"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     />
-    <link rel="shortcut icon" href="./4geeks.ico" />
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        background-color: #4caf50;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Alinear el contenido al principio */
+        align-items: center;
+      }
+      .card {
+        width: 100px;
+        height: 140px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        color: black;
+        position: relative;
+        border: 1px solid #fff;
+        border-radius: 10px;
+        background-color: #fff;
+        margin: 5px;
+      }
+      .card .icon {
+        position: absolute;
+        font-size: 1.5rem;
+      }
+      .card .top-left {
+        top: 5px;
+        left: 5px;
+      }
+      .card .bottom-right {
+        bottom: 5px;
+        right: 5px;
+        transform: rotate(180deg);
+      }
+      .container {
+        text-align: center;
+        margin-top: 20px; /* Añadir un margen superior para separar del borde superior */
+      }
+      .controls {
+        margin-bottom: 20px;
+      }
+      .log-container {
+        margin-top: 20px;
+        text-align: left;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
-    <div class="container-fluid text-center">
-      <h1 class="mt-5">Hello Rigo!</h1>
-      <img src="./rigo-baby.jpg" />
-      <p class="alert alert-warning mt-4">
-        If this text is <b>not</b> centered and <b>yellow</b>, you probably have
-        an error
-      </p>
-      <div class="fixed-bottom p-4">
-        Made with ❤️ by
-        <a href="https://www.4geeksacademy.com">4Geeks Academy</a>
+    <div class="container">
+      <div class="controls">
+        <input
+          type="number"
+          id="cardCount"
+          placeholder="Número de cartas"
+          min="1"
+        />
+        <button id="drawBtn" class="btn btn-primary">Sortear</button>
+        <button id="sortBtn" class="btn btn-secondary">Ordenar</button>
       </div>
+      <div id="cardsContainer" class="d-flex flex-wrap"></div>
+      <div id="logContainer" class="log-container"></div>
     </div>
+
+    <!-- Enlace al archivo JavaScript externo -->
+    <script src="app.js"></script>
   </body>
 </html>
