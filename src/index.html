@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Carta Aleatoria</title>
+    <title>Generador de Cartas</title>
     <link
       href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css"
       rel="stylesheet"
@@ -19,13 +19,15 @@
         background-color: #4caf50;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start; /* Alinear el contenido al principio */
+        justify-content: flex-start;
         align-items: center;
       }
+
       .card {
         width: 100px;
         height: 140px;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         font-size: 2rem;
@@ -36,30 +38,63 @@
         background-color: #fff;
         margin: 5px;
       }
+
       .card .icon {
         position: absolute;
         font-size: 1.5rem;
       }
+
       .card .top-left {
         top: 5px;
         left: 5px;
       }
+
       .card .bottom-right {
         bottom: 5px;
         right: 5px;
         transform: rotate(180deg);
       }
+
+      .card-number {
+        font-size: 2rem;
+      }
+
+      /* Estilos para cambiar el color a rojo para corazones y diamantes */
+      .card.heart .icon,
+      .card.heart .card-number,
+      .card.diamond .icon,
+      .card.diamond .card-number {
+        color: red;
+      }
+
       .container {
         text-align: center;
-        margin-top: 20px; /* Añadir un margen superior para separar del borde superior */
+        margin-top: 20px;
       }
+
       .controls {
         margin-bottom: 20px;
       }
+
+      #cardsContainer {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+
       .log-container {
         margin-top: 20px;
         text-align: left;
         width: 100%;
+      }
+
+      .iteration-row {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 10px;
       }
     </style>
   </head>
@@ -75,11 +110,9 @@
         <button id="drawBtn" class="btn btn-primary">Sortear</button>
         <button id="sortBtn" class="btn btn-secondary">Ordenar</button>
       </div>
-      <div id="cardsContainer" class="d-flex flex-wrap"></div>
+      <div id="cardsContainer"></div>
       <div id="logContainer" class="log-container"></div>
     </div>
-
-    <!-- Enlace al archivo JavaScript externo -->
     <script src="app.js"></script>
   </body>
 </html>

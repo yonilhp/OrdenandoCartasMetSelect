@@ -2,14 +2,16 @@ document.getElementById("drawBtn").addEventListener("click", drawCards);
 document.getElementById("sortBtn").addEventListener("click", sortCards);
 
 let cards = [];
+let originalCards = [];
 let log = [];
 let currentIteration = 0;
 
 function drawCards() {
   const cardCount = parseInt(document.getElementById("cardCount").value) || 0;
   cards = generateRandomCards(cardCount);
+  originalCards = [...cards];
   displayCards(cards);
-  log = []; // Reset log after drawing new cards
+  log = [];
   currentIteration = 0;
   document.getElementById("logContainer").innerHTML = "";
 }
@@ -51,10 +53,10 @@ function createCardElement({ suit, value }) {
   const card = document.createElement("div");
   card.className = `card ${suit}`;
   card.innerHTML = `
-        <div class="icon top-left">${getCardIcon(suit)}</div>
-        <div class="icon bottom-right">${getCardIcon(suit)}</div>
-        <div class="card-number">${value}</div>
-    `;
+    <div class="icon top-left">${getCardIcon(suit)}</div>
+    <div class="icon bottom-right">${getCardIcon(suit)}</div>
+    <div class="card-number">${value}</div>
+  `;
   return card;
 }
 
@@ -69,20 +71,18 @@ function getCardIcon(suit) {
 }
 
 function sortCards() {
-  const sortedCards = bubbleSort(cards.slice());
-  log.push({
-    timestamp: new Date().toLocaleTimeString(),
-    sortedCards: sortedCards
-      .map(card => `${card.value}${getCardIcon(card.suit)}`)
-      .join(", ")
-  });
-  displaySortedCards(sortedCards);
+  if (cards.length === 0) return;
+
+  log = [];
+  currentIteration = 0;
+  const sortedCards = bubbleSortWithIterations(cards.slice());
+  cards = sortedCards;
+  displayCards(cards);
   displayLog();
 }
 
-function bubbleSort(array) {
+function bubbleSortWithIterations(array) {
   const n = array.length;
-  let iterations = 0;
   const result = [...array];
 
   for (let i = 0; i < n - 1; i++) {
@@ -91,12 +91,9 @@ function bubbleSort(array) {
         [result[j], result[j + 1]] = [result[j + 1], result[j]];
       }
     }
-    iterations++;
     log.push({
-      timestamp: new Date().toLocaleTimeString(),
-      sortedCards: result
-        .map(card => `${card.value}${getCardIcon(card.suit)}`)
-        .join(", ")
+      iteration: i + 1,
+      sortedCards: result.slice() // Guardar el estado actual de las cartas
     });
   }
   return result;
@@ -123,48 +120,21 @@ function compareCards(card1, card2) {
   return value1 - value2;
 }
 
-function displaySortedCards(sortedCards) {
-  const cardsContainer = document.getElementById("cardsContainer");
-  cardsContainer.innerHTML = "";
-  const rows = Math.ceil(sortedCards.length / 3);
-
-  for (let i = 0; i < rows; i++) {
-    const row = document.createElement("div");
-    row.className = "d-flex";
-    for (let j = 0; j < 3; j++) {
-      const index = i * 3 + j;
-      if (index < sortedCards.length) {
-        const cardElement = createCardElement(sortedCards[index]);
-        row.appendChild(cardElement);
-      }
-    }
-    cardsContainer.appendChild(row);
-  }
-}
-
 function displayLog() {
   const logContainer = document.getElementById("logContainer");
   logContainer.innerHTML = log
     .map(
       entry => `
-        <div>
-            <strong>${entry.timestamp}:</strong>
-            <div class="d-flex">
-                ${entry.sortedCards
-                  .split(", ")
-                  .map(cardStr => {
-                    const [value, icon] = cardStr.split(
-                      /(?<=\d)(?=\D)|(?<=\D)(?=\d)/
-                    );
-                    return `<div class="card">${
-                      icon
-                        ? `<div class="icon top-left">${icon}</div><div class="icon bottom-right">${icon}</div>`
-                        : ""
-                    }<div class="card-number">${value}</div></div>`;
-                  })
-                  .join("")}
-            </div>
+      <div>
+        <strong>Iteración ${entry.iteration}:</strong>
+        <div class="iteration-row">
+          ${entry.sortedCards
+            .map(card => {
+              return createCardElement(card).outerHTML;
+            })
+            .join("")}
         </div>
+      </div>
     `
     )
     .join("");
